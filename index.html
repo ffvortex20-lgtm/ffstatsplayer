@@ -11,17 +11,26 @@
   <h1>🔥 Free Fire Stats</h1>
   <p>Powered by VORTEX</p>
 
-  <input type="text" id="nick" placeholder="Nickname do jogador">
-  <button onclick="buscar()">Buscar Stats</button>
+  <input id="uid" placeholder="UID do jogador">
+  
+  <select id="region">
+    <option value="BR">Brasil</option>
+    <option value="SG">Singapura</option>
+    <option value="IND">Índia</option>
+  </select>
 
-  <div id="card" class="card hidden">
-    <h2 id="player"></h2>
+  <button onclick="buscar()">Buscar</button>
+
+  <div id="card" class="hidden">
+    <h2 id="name"></h2>
     <p>Level: <span id="level"></span></p>
     <p>Rank: <span id="rank"></span></p>
-    <p>KD: <span id="kd"></span></p>
-    <p>HS: <span id="hs"></span>%</p>
-    <p class="status">Status: 🔥 PRO PLAYER</p>
+    <p>Kills: <span id="kills"></span></p>
+    <p>Partidas: <span id="matches"></span></p>
+    <p>Headshots: <span id="hs"></span>%</p>
   </div>
+
+  <p id="status"></p>
 </div>
 
 <script src="script.js"></script>
