@@ -9,10 +9,10 @@
 
 <div class="container">
   <h1>🔥 Free Fire Stats</h1>
-  <p>Powered by VORTEX</p>
+  <p class="sub">Powered by VORTEX</p>
 
   <input id="uid" placeholder="UID do jogador">
-  
+
   <select id="region">
     <option value="BR">Brasil</option>
     <option value="SG">Singapura</option>
@@ -21,16 +21,18 @@
 
   <button onclick="buscar()">Buscar</button>
 
-  <div id="card" class="hidden">
+  <p id="status"></p>
+
+  <div id="card" class="card hidden">
     <h2 id="name"></h2>
     <p>Level: <span id="level"></span></p>
     <p>Rank: <span id="rank"></span></p>
     <p>Kills: <span id="kills"></span></p>
     <p>Partidas: <span id="matches"></span></p>
     <p>Headshots: <span id="hs"></span>%</p>
+    <p>Status Ban: <span id="ban"></span></p>
+    <p>Blacklist: <span id="blacklist"></span></p>
   </div>
-
-  <p id="status"></p>
 </div>
 
 <script src="script.js"></script>
