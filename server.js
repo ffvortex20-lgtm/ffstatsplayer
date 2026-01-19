@@ -4,56 +4,49 @@ import fetch from "node-fetch";
 const app = express();
 app.use(express.static("public"));
 
-app.get("/api/player", async (req, res) => {
+const API_KEY = "SUA_API_KEY_AQUI"; // se a API exigir
+
+app.get("/api/freefire", async (req, res) => {
   const { uid, region } = req.query;
 
   if (!uid || !region) {
-    return res.json({ success: false, error: "UID ou região ausente" });
+    return res.json({ success: false, error: "UID ou região faltando" });
   }
 
-  const apiURL = `https://free-ff-api-src-5plp.onrender.com/api/v1/playerstats?region=${region}&uid=${uid}`;
-
   try {
-    const response = await fetch(apiURL, { timeout: 15000 });
+    const response = await fetch(
+      `https://freefire-api.com/player?uid=${uid}&region=${region}`,
+      {
+        headers: {
+          "Authorization": `Bearer ${API_KEY}`
+        }
+      }
+    );
 
     if (!response.ok) {
-      console.error("API OFFLINE:", response.status);
-      return res.json({ success: false, error: "API indisponível" });
+      return res.json({ success: false, error: "API offline" });
     }
 
-    const json = await response.json();
-
-    if (!json.player || !json.stats) {
-      console.error("Dados inválidos:", json);
-      return res.json({ success: false, error: "Jogador não encontrado" });
-    }
-
-    const banned =
-      json.player.is_banned === true ||
-      json.player.ban_status === "banned";
-
-    const blacklisted =
-      json.player.blacklisted === true ||
-      json.player.flagged === true;
+    const data = await response.json();
 
     res.json({
       success: true,
-      nickname: json.player.nickname || "Desconhecido",
-      level: json.player.level || 0,
-      rank: json.player.rank || "N/A",
-      kills: json.stats.kills || 0,
-      matches: json.stats.matches || 0,
-      headshot_rate: json.stats.headshot_rate || 0,
-      banned,
-      blacklisted
+      nickname: data.account.nickname,
+      level: data.account.level,
+      rank: data.stats.rank,
+      kd: data.stats.kd,
+      kills: data.stats.kills,
+      matches: data.stats.matches,
+      banned: data.account.is_banned === true,
+      blacklisted: data.blacklist === true
     });
 
   } catch (err) {
-    console.error("ERRO FETCH:", err.message);
-    res.json({ success: false, error: "Falha ao conectar à API" });
+    console.error(err);
+    res.json({ success: false, error: "Erro ao conectar à API" });
   }
 });
 
 app.listen(3000, () => {
-  console.log("🔥 Free Fire Stats VORTEX rodando em http://localhost:3000");
+  console.log("🔥 Free Fire Community API rodando");
 });
