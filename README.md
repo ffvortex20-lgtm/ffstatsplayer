@@ -1,13 +1,16 @@
-# Free Fire Stats Viewer
+# Free Fire Stats Viewer • VORTEX
 
-Projeto educacional para visualização de estatísticas de jogadores Free Fire.
+Projeto educacional que mostra estatísticas reais de jogadores Free Fire usando Free-FF-API.
 
-⚠️ Não utiliza API oficial.
+## Funcionalidades
+- Stats reais
+- Status de BAN
+- Status de Blacklist
+- Interface gamer
 
-## Tecnologias
-- HTML
-- CSS
-- JavaScript
+⚠️ Blacklist é baseada em dados comunitários.
+Somente a Garena confirma banimentos oficiais.
 
-## Status
-Em desenvolvimento 🚧
+## Rodar
+npm install  
+npm start
