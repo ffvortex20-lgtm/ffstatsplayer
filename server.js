@@ -7,13 +7,25 @@ app.use(express.static("public"));
 app.get("/api/player", async (req, res) => {
   const { uid, region } = req.query;
 
+  if (!uid || !region) {
+    return res.json({ success: false, error: "UID ou região ausente" });
+  }
+
+  const apiURL = `https://free-ff-api-src-5plp.onrender.com/api/v1/playerstats?region=${region}&uid=${uid}`;
+
   try {
-    const apiURL = `https://free-ff-api-src-5plp.onrender.com/api/v1/playerstats?region=${region}&uid=${uid}`;
-    const response = await fetch(apiURL);
+    const response = await fetch(apiURL, { timeout: 15000 });
+
+    if (!response.ok) {
+      console.error("API OFFLINE:", response.status);
+      return res.json({ success: false, error: "API indisponível" });
+    }
+
     const json = await response.json();
 
-    if (!json || !json.player) {
-      return res.json({ success: false });
+    if (!json.player || !json.stats) {
+      console.error("Dados inválidos:", json);
+      return res.json({ success: false, error: "Jogador não encontrado" });
     }
 
     const banned =
@@ -26,18 +38,19 @@ app.get("/api/player", async (req, res) => {
 
     res.json({
       success: true,
-      nickname: json.player.nickname,
-      level: json.player.level,
-      rank: json.player.rank,
-      kills: json.stats.kills,
-      matches: json.stats.matches,
-      headshot_rate: json.stats.headshot_rate,
+      nickname: json.player.nickname || "Desconhecido",
+      level: json.player.level || 0,
+      rank: json.player.rank || "N/A",
+      kills: json.stats.kills || 0,
+      matches: json.stats.matches || 0,
+      headshot_rate: json.stats.headshot_rate || 0,
       banned,
       blacklisted
     });
 
-  } catch {
-    res.json({ success: false });
+  } catch (err) {
+    console.error("ERRO FETCH:", err.message);
+    res.json({ success: false, error: "Falha ao conectar à API" });
   }
 });
 
