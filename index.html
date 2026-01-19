@@ -1,99 +1,41 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Free Fire Stats • VORTEX</title>
-  <style>
-    body {
-      background:#0d1117;
-      color:white;
-      font-family:Arial;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      height:100vh;
-    }
-    .box {
-      background:#161b22;
-      padding:20px;
-      border-radius:10px;
-      width:320px;
-      text-align:center;
-    }
-    input, button {
-      width:100%;
-      padding:10px;
-      margin-top:10px;
-      border-radius:6px;
-      border:none;
-    }
-    button {
-      background:#7c3aed;
-      color:white;
-      cursor:pointer;
-    }
-    .status {
-      margin-top:15px;
-      font-weight:bold;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VORTEX • Gerador</title>
+<style>
+body{background:#0b0e14;color:#fff;font-family:Segoe UI,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0}
+.container{background:#161b22;padding:30px;border-radius:12px;border:1px solid #30363d;width:450px}
+h2{text-align:center;color:#7c3aed}
+label{font-size:12px;color:#8b949e;margin-top:10px;display:block}
+input{width:100%;padding:12px;margin-top:5px;border-radius:6px;border:1px solid #30363d;background:#0d1117;color:#fff}
+button{width:100%;padding:14px;margin-top:20px;border-radius:6px;border:none;background:#7c3aed;color:#fff;font-weight:bold;cursor:pointer}
+#resultado{margin-top:20px;display:none;padding:15px;background:#0d1117;border:1px dashed #7c3aed;border-radius:6px}
+#linkFinal{color:#58a6ff;word-break:break-all}
+</style>
 </head>
 <body>
-
-<div class="box">
-  <h2>🔥 Free Fire Stats</h2>
-
-  <input id="uid" placeholder="UID do jogador">
-  <input id="region" placeholder="Região (BR, SG, etc)">
-  <button onclick="buscar()">Buscar</button>
-
-  <div id="resultado"></div>
-  <div id="status" class="status"></div>
+<div class="container">
+<h2>Gerar Link VORTEX</h2>
+<label>Título</label><input id="tit">
+<label>Arquivo</label><input id="nom">
+<label>Tamanho</label><input id="tam">
+<label>Link Download</label><input id="l_d">
+<label>Link Botão</label><input id="l_c">
+<label>ID ou Link YouTube</label><input id="l_v">
+<button onclick="gerar()">GERAR LINK</button>
+<div id="resultado"><strong id="linkFinal"></strong></div>
 </div>
-
 <script>
-async function buscar() {
-  const uid = document.getElementById("uid").value;
-  const region = document.getElementById("region").value;
-  const resultado = document.getElementById("resultado");
-  const status = document.getElementById("status");
-
-  resultado.innerHTML = "⏳ Buscando...";
-  status.innerHTML = "";
-
-  try {
-    const res = await fetch(`/api/freefire?uid=${uid}&region=${region}`);
-    const data = await res.json();
-
-    if (!data.success) {
-      resultado.innerHTML = "❌ " + data.error;
-      return;
-    }
-
-    resultado.innerHTML = `
-      <p>👤 Nick: ${data.nickname}</p>
-      <p>⭐ Level: ${data.level}</p>
-      <p>🏆 Rank: ${data.rank}</p>
-      <p>🎯 Kills: ${data.kills}</p>
-      <p>📊 Partidas: ${data.matches}</p>
-    `;
-
-    if (data.banned) {
-      status.innerHTML = "🚫 CONTA BANIDA";
-      status.style.color = "red";
-    } else if (data.blacklisted) {
-      status.innerHTML = "⚠️ BLACKLIST";
-      status.style.color = "orange";
-    } else {
-      status.innerHTML = "✅ CONTA LIMPA";
-      status.style.color = "lime";
-    }
-
-  } catch (e) {
-    resultado.innerHTML = "❌ Erro ao conectar com a API";
-  }
+function gerar(){
+const base=location.href.split('?')[0].replace('index.html','');
+const v=document.getElementById('l_v').value;
+const vid=v.includes('v=')?v.split('v=')[1].split('&')[0]:v.split('/').pop();
+const p=`?t=${encodeURIComponent(tit.value)}&n=${encodeURIComponent(nom.value)}&s=${encodeURIComponent(tam.value)}&d=${encodeURIComponent(l_d.value)}&c=${encodeURIComponent(l_c.value)}&v=${vid}`;
+const link=base+'concluir.html'+p;
+linkFinal.innerText=link;resultado.style.display='block';
 }
 </script>
-
 </body>
 </html>
